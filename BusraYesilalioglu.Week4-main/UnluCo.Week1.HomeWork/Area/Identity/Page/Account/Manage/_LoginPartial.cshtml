@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using UnluCo.Week1.HomeWork.Models
+@using UnluCo.Week1.HomeWork.MyIdentity
+
+@inject SignInManager<MyIdentityUser> SignInManager
+@inject UserManager<MyIdentityUser> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var loginUser = await UserManager.GetUserAsync(User);
+        var userRole = await UserManager.GetRolesAsync(loginUser);
+
+
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                Hello<b>
+                    @loginUser.Email!
+                </b>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <b> Role:</b>@userRole.FirstOrDefault()
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>
